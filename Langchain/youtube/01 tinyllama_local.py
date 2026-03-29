@@ -12,19 +12,33 @@ model = ChatHuggingFace(llm=llm)
 # print(res)
 # print(res.content)
 
-res_chunk = model.stream("Can i learn PS in 7 days?")
+# res_chunk = model.stream("Can i learn PS in 7 days?")
 
-for chunk in res_chunk:
-    print(chunk.content, end="", flush=True)
+# for chunk in res_chunk:
+#     print(chunk.content, end="", flush=True)
 
-# while True:
-#     user_input = input("Arya: ")
-#     if user_input == "exit":
-#         break
+chat_history = []
 
-#     print("AI: ", end="", flush=True)
+while True:
+    user_input = input("Arya: ")
+    chat_history.append(user_input)
+    if user_input == "exit":
+        break
 
-#     for chunk in model.stream(user_input):
-#         print(chunk.content, end="", flush=True)
+    print("AI: ", end="", flush=True)
 
-#     print()
+    # res = model.invoke(chat_history)
+    # print(res.content)
+
+    full_response = ""
+    
+    res_chunk = model.stream(user_input)
+    for chunk in res_chunk:
+        print(chunk.content, end="", flush=True)
+        full_response += chunk.content
+
+    chat_history.append(full_response)
+
+    print()
+
+print("Full chat history: ", chat_history)
